@@ -15,7 +15,7 @@ io.on('connection', function(socket){
     console.log('message from ', msg + " " + socket.id);
 
     socket.broadcast.to(socket.id).emit('chat message', 'Hello there, ' 
-    	+ socket.id + '. You sent me ' + msg + ' !!!!') 
+    	+ socket.id + '. You sent me ' + socket.id + ' !!!!') 
 
   });
 });

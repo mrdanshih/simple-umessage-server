@@ -32,7 +32,6 @@ io.on('connection', function(socket){
    });
  });
 
-
 http.listen(port, function(){
   console.log('listening on port %d', port);
 });
@@ -40,7 +39,6 @@ http.listen(port, function(){
 
 function doSomeLogging() {
 	console.log(Object.keys(clients));
-
 	// for(num in clients) {
  //     	 clients[num].emit('chat message', 'Hello there, I have your number: ' 
  //    	+ num);

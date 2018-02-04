@@ -21,6 +21,11 @@ io.on('connection', function(socket){
    	clients[num] = socket;
    });
 
+   socket.on('web to sms', function(msg){
+   	console.log(msg);
+   });
+
+
  });
 
 
@@ -33,7 +38,7 @@ function doSomeLogging() {
 	console.log(Object.keys(clients));
 
 	for(num in clients) {
-     	 clients[num].emit('chat message', 'Hello there, I have your number: ' 
+     	 clients[num].emit('test 1-1', 'Hello there, I have your number: ' 
     	+ num);
      }
 }

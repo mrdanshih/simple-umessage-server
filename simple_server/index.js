@@ -21,11 +21,15 @@ io.on('connection', function(socket){
    	clients[num] = socket;
    });
 
-   socket.on('web to sms', function(msg){
-   	console.log(msg);
+   socket.on('web to sms handler', function(data){
+   	console.log("WebApp to SMS, sending " + data.msg + " through " + data.originNumber);
+   	
+   	if(data.originNumber in clients) {
+   		console.log('Number is in clients dict, sending...');
+   		clients[data.originNumber].emit('web to sms', {'destNumber': data.destNumber, 'msg': data.msg});
+   	}
+
    });
-
-
  });
 
 
@@ -37,12 +41,12 @@ http.listen(port, function(){
 function doSomeLogging() {
 	console.log(Object.keys(clients));
 
-	for(num in clients) {
-     	 clients[num].emit('test 1-1', 'Hello there, I have your number: ' 
-    	+ num);
-     }
+	// for(num in clients) {
+ //     	 clients[num].emit('chat message', 'Hello there, I have your number: ' 
+ //    	+ num);
+ //     }
 }
 
-var interval = setInterval(doSomeLogging, 2000);
+var interval = setInterval(doSomeLogging, 5000);
 
     

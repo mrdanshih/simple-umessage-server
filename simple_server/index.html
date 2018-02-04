@@ -20,7 +20,15 @@
   $(function () {
     var socket = io();
     $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
+      var msg = $('#m').val();
+      var tokens = msg.split(':');
+
+      if(tokens.length == 4 && tokens[0] == 'SMS') {
+        socket.emit('web to sms handler', {'originNumber': tokens[1], 'destNumber': tokens[2], 'msg': tokens[3]});
+      } else {
+        socket.emit('chat message', msg);
+      }
+      
       $('#m').val('');
       return false;
     });

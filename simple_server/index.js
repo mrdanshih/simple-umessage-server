@@ -13,10 +13,16 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
     console.log('message from ', msg + " " + socket.id);
+
+    socket.broadcast.to(socket.id).emit('chat message', 'Hello there, ' 
+    	+ socket.id + '. You sent me ' + msg + ' !!!!') 
+
   });
 });
 
 http.listen(port, function(){
   console.log('listening on port %d', port);
 });
+
+
     

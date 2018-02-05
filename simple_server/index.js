@@ -27,7 +27,9 @@ io.on('connection', function(socket){
    	if(data.originNumber in clients) {
    		console.log('Number is in clients dict, sending...');
    		clients[data.originNumber].emit('web to sms', {'destNumber': data.destNumber, 'msg': data.msg});
-   	}
+   	} else {
+      socket.emit('sms send error', 'Could not send text - sender number not online');
+    }
 
    });
  });

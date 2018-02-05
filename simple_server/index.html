@@ -8,6 +8,15 @@
       form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
       form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
       form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+
+       label {
+      color: #FFF;
+      font-weight: bold;
+      display: block;
+      width: 150px;
+      float: left;
+      }
+
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
@@ -15,7 +24,7 @@
   </head>
 
   <strong>
-  Send a message, use this format - SMS:originNumber:destNumber:message
+  uMessage
   </strong>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -24,12 +33,15 @@
   $(function () {
     var socket = io();
     $('form').submit(function(){
+      var sender = $('#sp').val();
+      var receiver = $('#rp').val();
       var msg = $('#m').val();
       var tokens = msg.split(':');
 
-      if(tokens.length == 4 && tokens[0] == 'SMS') {
-        socket.emit('web to sms handler', {'originNumber': tokens[1], 'destNumber': tokens[2], 'msg': tokens[3]});
-      } else {
+      if(sender.length > 0 && receiver.length > 0 && msg.length > 0) {
+        socket.emit('web to sms handler', {'originNumber': sender, 'destNumber': receiver, 'msg': msg});
+        $('#messages').append($('<li>').text("SMS Send Requested via " + sender + " to " + receiver + ": " + msg));
+      } else if (msg.length > 0) {
         socket.emit('chat message', msg);
       }
       
@@ -39,13 +51,35 @@
     socket.on('chat message', function(msg){
       $('#messages').append($('<li>').text(msg));
     });
+
+    socket.on('sms send error', function(msg) {
+      $('#messages').append($('<li>').text(msg));
+    });
   });
 </script>
 
   <body>
     <ul id="messages"></ul>
     <form action="">
+
+    <div style="width: 700px;">
+
+      <div style="float:left;margin-right:5px;">
+        <label for="sp">Sender Phone #</label>
+        <input id="sp" autocomplete="off" />
+      </div>
+
+      <div style="float:right;margin-right:5px;">
+         <label for="rp">Receiver Phone #</label>
+        <input id="rp" autocomplete="off" />
+      </div>
+
+    </div>
+     
+    <div>
+      <label for="m">Message</label>
       <input id="m" autocomplete="off" /><button>Send</button>
+    </div>
     </form>
   </body>
 </html>

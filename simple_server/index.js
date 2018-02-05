@@ -28,9 +28,17 @@ io.on('connection', function(socket){
    		console.log('Number is in clients dict, sending...');
    		clients[data.originNumber].emit('web to sms', {'destNumber': data.destNumber, 'msg': data.msg});
    	} else {
-      socket.emit('sms send error', 'Could not send text - sender number not online');
+      socket.emit('sms send error', 'Could not send text - sender number not online... must open uMessage app');
     }
+   });
 
+   socket.on('disconnect', function(){
+    console.log("Disconnected: " + socket.id);
+      for(phone in clients) {
+        if(clients[phone].id == socket.id) {
+          delete clients[phone];
+        }
+      }
    });
  });
 

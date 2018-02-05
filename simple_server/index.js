@@ -28,7 +28,7 @@ io.on('connection', function(socket){
    		console.log('Number is in clients dict, sending...');
    		clients[data.originNumber].emit('web to sms', {'destNumber': data.destNumber, 'msg': data.msg});
    	} else {
-      socket.emit('sms send error', 'Could not send text - sender number not online... must open uMessage app');
+      socket.emit('sms send error', 'Could not send text - check the sender number you entered, or ensure that the phone number you entered has uMessage running.');
     }
    });
 
